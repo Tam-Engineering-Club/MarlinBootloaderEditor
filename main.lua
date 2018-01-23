@@ -12,12 +12,17 @@ function love.load()
 		map[i] = {}
 		for j=1, screenW do
 			-- print( p[i][j])
-			map[i][j] = p[i][j]
+			if p[i][j] ~= nil then
+				map[i][j] = p[i][j]
+			else
+				map[i][j] = "0"
+			end
 		end
 	end
+	-- print (string.format("%x",12))
 	-- for i=1, #map do
 	-- 	for j=1, #map[i] do
-	-- 		io.write(map[i][j])
+	-- 		print(map[i][j])
 	-- 	end
 	-- end
 	-- print (tonumber("0x7DE",16))
@@ -35,11 +40,6 @@ end
 function love.keypressed(key)
    if key == "return" then
    		genMapFile(map,"map.txt")
-  --  		for i=1, #map do
-		-- 	for j=1, #map[i] do
-		-- 		io.write(map[i][j])
-		-- 	end
-		-- end
    end
 end
 function placeTile(tileMap,mState)
@@ -48,9 +48,9 @@ function placeTile(tileMap,mState)
 		my = math.floor((love.mouse.getY())/scl) + 1;
 		--- if 0 erase if 1 then draw
 		if mState == 0 then
-			tileMap[my][mx] = "0xFF"; -- sets the value of the block to the one in the map
+			tileMap[my][mx] = "1"; -- sets the value of the block to the one in the map
 		else 
-			tileMap[my][mx] = "0x00";
+			tileMap[my][mx] = "0";
 		end
 	end
 end

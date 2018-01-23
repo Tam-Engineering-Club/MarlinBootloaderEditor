@@ -16,15 +16,26 @@ function string:split(sep)
     return fields
 end
 
-function replaceStr(table,a,b)
-	for i = 1, #table do
-		if table[i] == a then
-			table[i] = b
-		else 
-			table[i] = "0xFF"
-		end
+function replaceStr(table,len)
+	temp = {}
+	str = ""
+	nm = 1
+	t = ""
+	for i=1, #table do
+		str = str .. table[i]
 	end
-	return table
+	-- print(str)
+	-- print(#str)
+	for i=1, #table/len do
+		t = string.sub(str, nm,len*i)
+		-- t = string.sub(str,nm, len*i)
+		-- t = string.format("%x",string.sub(str,nm, len*i))
+		-- print (string.len(t))
+		print(string.format("%x",tonumber(t,2)))
+		temp[i] = string.format("%x",tonumber(t,2))
+		nm = (len * i) + 1
+	end
+	return temp
 end
 
 function addZeros(str,len)
@@ -77,14 +88,15 @@ end
 function genMapFile(map,name)
 	local m = deepcopy(map)
 	fileData = ""
+	t =""
 	for i=1, #m do
-		-- replaceStr(m[i],0,"0x00")
+		m[i] = replaceStr(m[i],8)
 		for j=1, #m[i] do
-			fileData = fileData .. tostring(m[i][j]) .. ","
+			t= tostring(m[i][j])
+			fileData = fileData .."0x".. addZeros(t,2) .. ","
 		end 
 	end	
-	-- print temp[1][1]
-	-- print map[1][1]
+	
 	fileData = string.sub(fileData,1,string.len(fileData) - 1)
 	print(string.len(fileData))	
 	path = love.filesystem.getSource() .. "/" .. name
